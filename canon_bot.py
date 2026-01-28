@@ -21,7 +21,7 @@ API_KEY = os.environ.get('API_KEY')
 genai.configure(api_key=API_KEY)
 
 # Model နာမည်ကို အတိအကျ ပြင်ဆင်ခြင်း
-model = genai.GenerativeModel('models/gemini-3-flash')
+model = genai.GenerativeModel('models/gemini-1.5-flash')
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
@@ -40,4 +40,5 @@ if __name__ == "__main__":
     t = Thread(target=run)
     t.start()
     bot.polling(non_stop=True)
+
 
