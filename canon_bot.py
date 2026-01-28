@@ -34,11 +34,12 @@ def handle_message(message):
     except Exception as e:
         # Error အပြည့်အစုံကို User ထံ ပြန်ပို့ခိုင်းခြင်း
         error_msg = str(e)
-        bot.reply_to(message, f"Error Detected: {error_msg}")
+        bot.reply_to(message, ကျေးဇူးပြု၍ ပြန်လည်စတင်ပါ။ f"Error Detected: {error_msg}")
 
 if __name__ == "__main__":
     t = Thread(target=run)
     t.start()
     bot.polling(non_stop=True)
+
 
 
