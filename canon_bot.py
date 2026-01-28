@@ -36,10 +36,11 @@ def handle_message(message):
     except Exception as e:
         print(f"Error: {e}")
         # Error အပြည့်အစုံကို Telegram မှာ ပြခိုင်းခြင်း
-        bot.reply_to(message, ထပ်မံကြိုးစားနေပါတယ်။ f"System Message: {e}")
+        bot.reply_to(message, f"System Message: {e}")
 
 if __name__ == "__main__":
     t = Thread(target=run)
     t.start()
     print("Bot is successfully starting...")
     bot.polling(non_stop=True)
+
