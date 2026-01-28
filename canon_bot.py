@@ -20,11 +20,9 @@ API_KEY = os.environ.get('API_KEY')
 
 genai.configure(api_key=API_KEY)
 
-# အရင် model = ... နေရာမှာ ဒါလေး အစားထိုးပါ
-try:
-    model = genai.GenerativeModel('gemini-1.5-flash')
-except:
-    model = genai.GenerativeModel('models/gemini-1.5-flash')
+# အခု Error တက်နေတဲ့ နေရာကို ဒီလိုပြင်လိုက်ပါ
+# 'gemini-1.5-flash' ဆိုတာကို အတိအကျ ခေါ်ယူခြင်း
+model = genai.GenerativeModel(model_name='gemini-1.5-flash')
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
@@ -32,16 +30,16 @@ bot = telebot.TeleBot(BOT_TOKEN)
 def handle_message(message):
     try:
         # Gemini သို့ စာပို့ခြင်း
-        chat_prompt = f"You are a Canon Repair Expert. Answer in Myanmar: {message.text}"
-        response = model.generate_content(chat_prompt)
+        # generate_content မှာ content တစ်ခုတည်း ပို့ကြည့်ပါ
+        response = model.generate_content(message.text)
         bot.reply_to(message, response.text)
     except Exception as e:
         print(f"Error: {e}")
-        # Error အမျိုးအစားကို User သိအောင် ပြန်ပို့ခြင်း
-        bot.reply_to(message, f"အဆင်မပြေ ဖြစ်နေပါတယ်ခင်ဗျာ။ ထပ်မံစမ်းသပ်ပါဦးမယ်။\nError Type: {e}")
+        # Error အပြည့်အစုံကို Telegram မှာ ပြခိုင်းခြင်း
+        bot.reply_to(message, ထပ်မံကြိုးစားနေပါတယ်။ f"System Message: {e}")
 
 if __name__ == "__main__":
     t = Thread(target=run)
     t.start()
-    print("Bot is successfully running on Render...")
+    print("Bot is successfully starting...")
     bot.polling(non_stop=True)
