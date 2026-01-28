@@ -4,24 +4,27 @@ import google.generativeai as genai
 from flask import Flask
 from threading import Thread
 
-# Render အတွက် Port ပေးခြင်း
+# ၁။ Render Port Timeout ကျော်ရန် Flask Server
 app = Flask('')
 @app.route('/')
 def home():
-    return "Bot is active!"
+    return "Bot is running!"
 
 def run():
     port = int(os.environ.get('PORT', 8080))
     app.run(host='0.0.0.0', port=port)
 
-# Key များ ခေါ်ယူခြင်း
+# ၂။ Bot Configuration
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 API_KEY = os.environ.get('API_KEY')
 
 genai.configure(api_key=API_KEY)
 
-# Model နာမည်ကို အတိအကျ ပြင်ဆင်ခြင်း
-model = genai.GenerativeModel('models/gemini-1.5-flash')
+# အရင် model = ... နေရာမှာ ဒါလေး အစားထိုးပါ
+try:
+    model = genai.GenerativeModel('gemini-1.5-flash')
+except:
+    model = genai.GenerativeModel('models/gemini-1.5-flash')
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
@@ -29,17 +32,16 @@ bot = telebot.TeleBot(BOT_TOKEN)
 def handle_message(message):
     try:
         # Gemini သို့ စာပို့ခြင်း
-        response = model.generate_content(message.text)
+        chat_prompt = f"You are a Canon Repair Expert. Answer in Myanmar: {message.text}"
+        response = model.generate_content(chat_prompt)
         bot.reply_to(message, response.text)
     except Exception as e:
-        # Error အပြည့်အစုံကို User ထံ ပြန်ပို့ခိုင်းခြင်း
-        error_msg = str(e)
-        bot.reply_to(message, ကျေးဇူးပြု၍ ပြန်လည်စတင်ပါ။ f"Error Detected: {error_msg}")
+        print(f"Error: {e}")
+        # Error အမျိုးအစားကို User သိအောင် ပြန်ပို့ခြင်း
+        bot.reply_to(message, f"အဆင်မပြေ ဖြစ်နေပါတယ်ခင်ဗျာ။ ထပ်မံစမ်းသပ်ပါဦးမယ်။\nError Type: {e}")
 
 if __name__ == "__main__":
     t = Thread(target=run)
     t.start()
+    print("Bot is successfully running on Render...")
     bot.polling(non_stop=True)
-
-
-
