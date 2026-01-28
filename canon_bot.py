@@ -35,10 +35,11 @@ def handle_message(message):
     except Exception as e:
         print(f"Error: {e}")
         # Error အမျိုးအစားကို User သိအောင် ပြန်ပို့ခြင်း
-        bot.reply_to(message, f"System Error ဖြစ်နေပါတယ်ခင်ဗျာ။\nError Type: {e}")
+        bot.reply_to(message, f"System Error ဖြစ်နေလို့ပါ။ အခုစမ်းသပ်အဆင့်မို့ ပိုကောင်းအောင် ကြိုးစားနေပါတယ်။\nError Type: {e}")
 
 if __name__ == "__main__":
     t = Thread(target=run)
     t.start()
     print("Bot is successfully running on Render...")
     bot.polling(non_stop=True)
+
